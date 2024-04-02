@@ -230,7 +230,7 @@
             <?php
                 $tsql = "SELECT MaSP,TenSP, Gia, Ma_Loai, HinhAnhSP,ID FROM (
                     select *, ROW_NUMBER() over (order by SLTC DESC) as rowoffset 
-                    from SAN_PHAM where Ma_loai = '$idlist' AND TenSP <> '$sprname') xx where rowoffset > 0";
+                    from SAN_PHAM where Ma_loai = '$idlist' AND TenSP <> '$sprname' AND SoLuong <> 0) xx where rowoffset > 0";
                 //$tsql = "SELECT MaSP,TenSP, Gia, Ma_Loai, HinhAnhSP,ID FROM SAN_PHAM WHERE Ma_loai = '$idlist' AND TenSP <> '$sprname' ";
                 $stmt = mysqli_query($conn, $tsql);
            

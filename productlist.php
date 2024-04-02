@@ -72,7 +72,7 @@
                 <!-- <a href="#"><i class="fa fa-shopping-cart cart"></i></a> -->
             <?php 
                 $idlist = $_GET['id'];
-                $tsql = "SELECT MaSP,TenSP, Gia, Ma_Loai, HinhAnhSP,ID FROM SAN_PHAM WHERE Ma_loai = '$idlist' ";
+                $tsql = "SELECT MaSP,TenSP, Gia, Ma_Loai, HinhAnhSP,ID FROM SAN_PHAM WHERE Ma_loai = '$idlist' AND SoLuong <> 0";
                 $stmt = mysqli_query($conn, $tsql);
            
                 while( $row = mysqli_fetch_array( $stmt, MYSQLI_ASSOC))

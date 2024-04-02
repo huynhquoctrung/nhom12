@@ -79,10 +79,15 @@
                         $_SESSION['luottruycapmh'.$masp] += 1*$soluong;
                     }
                     $sltc = $_SESSION['luottruycapmh'.$masp];
-                    
-                    $upsltcsql = "UPDATE SAN_PHAM SET SLTC = $sltc where MaSP = '$masp' ";
+
+                    $findProductToUpdate = "SELECT SoLuong FROM SAN_PHAM where MaSP = '$masp' ";
+                    $connectTOQuery = mysqli_query($conn, $findProductToUpdate);
+                    $data = mysqli_fetch_object($connectTOQuery);
+                    $SLHT = $data->SoLuong - $soluong;
+                    $upsltcsql = "UPDATE SAN_PHAM SET SLTC = $sltc , SoLuong = $SLHT where MaSP = '$masp' ";
                     $connup = mysqli_query($conn, $upsltcsql);
                 }
+                unset($_SESSION['luottruycapmh'.$masp]);
                 unset($_SESSION['voucher-used']);
                 header("Location: ./index.php");
             }

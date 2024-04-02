@@ -100,6 +100,7 @@ if (!empty($_SESSION["username"])) {
                                     SET TongHoaDon= $totalsave WHERE MaHÐ= '$HD'";
                             $createttb = mysqli_query($conn, $ttb);
                             unset($_SESSION["buy-now"]);
+                            
                             if (!empty(strchr($_SESSION["username"], 'Employ')) || !empty(strchr($_SESSION["username"], 'employ'))) {
                                 header("Location: /admin page/invoice-admin.php?billid=$HD");
 
@@ -204,9 +205,12 @@ if (!empty($_SESSION["username"])) {
                                     $_SESSION['luottruycapmh' . $row_tmp['ID']] += 1 * $_POST['quantity'][$row_tmp["ID"]];
                                 }
                                 $sltc = $_SESSION['luottruycapmh' . $row_tmp['ID']];
-                                $upsltcsql = "UPDATE SAN_PHAM SET SLTC = $sltc where ID = $idcl";
+                                //Giảm số lượng tồn trong kho
+                                $slmh = $row_tmp['SoLuong'] - $_POST['quantity'][$row_tmp["ID"]];
+                                
+                                $upsltcsql = "UPDATE SAN_PHAM SET SLTC = $sltc , SoLuong = $slmh where ID = $idcl;";
                                 $connup = mysqli_query($conn, $upsltcsql);
-
+                                // var_dump($connup);exit;
                                 $totalsavecart = $row_tmp['Gia'] * $_POST['quantity'][$row_tmp["ID"]];
                                 $totalsave += $totalsavecart;
 
@@ -216,6 +220,8 @@ if (!empty($_SESSION["username"])) {
                                 $icsql = "INSERT INTO CT_HD (MaHÐ, MaSP, SoLuong, TongGia, MaPTTT, NgayMua) 
                                                 VALUES ('$MHD','" . $row_tmp2['MaSP'] . "','" . $_SESSION['cart'][$row_tmp['ID']] . "','$totalsavecart','COD','" . $uptime . "')";
                                 $insertcart = mysqli_query($conn, $icsql);
+
+                                unset($_SESSION['luottruycapmh'.$row_tmp['ID']]);
 
                             }
 

@@ -146,7 +146,7 @@
         <h2>SẢN PHẨM</h2> <!--tất cả sản phẩm-->
         <div class="product-container">
         <?php 
-                $tsql = "SELECT MaSP,TenSP, Gia, Ma_Loai, HinhAnhSP,ID FROM SAN_PHAM ORDER BY SLTC DESC LIMIT 4";
+                $tsql = "SELECT MaSP,TenSP, Gia, Ma_Loai, HinhAnhSP,ID FROM SAN_PHAM WHERE SoLuong <> 0 ORDER BY SLTC DESC LIMIT 4";
                 $result = mysqli_query($conn, $tsql);
            
                 while( $row = mysqli_fetch_assoc($result))
@@ -195,7 +195,7 @@
                 <!-- <a href="#"><i class="fa fa-shopping-cart cart"></i></a> -->
             <?php 
                 // Get 4 product that have top of buying-product 
-                $tsql = "SELECT MaSP,TenSP, Gia, Ma_Loai, HinhAnhSP,ID FROM SAN_PHAM WHERE Ma_Loai = '$maloai' ORDER BY SLTC DESC LIMIT 4";
+                $tsql = "SELECT MaSP,TenSP, Gia, Ma_Loai, HinhAnhSP,ID FROM SAN_PHAM WHERE Ma_Loai = '$maloai' AND SoLuong <> 0 ORDER BY SLTC DESC LIMIT 4";
                 $result = mysqli_query($conn, $tsql);
            
                 while( $row = mysqli_fetch_assoc($result))

@@ -60,13 +60,13 @@ if(isset($_POST['update-product'])){
         $uploadimg = $_FILES['img'];
         $uploadname = $_FILES['img']['name'];
         $upresult = UpLoadImg($uploadimg);
-        if(empty($upresult)){
+        if(empty($upresult) == true){
             $upresult = UpLoadImg($uploadimg);
         }
         if(!empty($upresult)){
             
             $upimgdtb = "UPDATE SAN_PHAM 
-                            SET HinhAnhSP = '$upresult' where MaSP = '$id' ";
+                            SET HinhAnhSP = N'$upresult' where MaSP = '$id' ";
             $connupimg = mysqli_query($conn, $upimgdtb);
            
         }
@@ -74,8 +74,7 @@ if(isset($_POST['update-product'])){
     
     header("Location: ./product-admin.php?limit=6&page-num=1");
 }
-
-if(isset($_POST['add-product'])){
+elseif(isset($_POST['add-product'])){
     if(!empty($_POST['quantity'])){
         $sl = $_POST['quantity'];
     }
@@ -126,15 +125,16 @@ if(isset($_POST['add-product'])){
         $uploadimg = $_FILES['img'];
         $uploadname = $_FILES['img']['name'];
         $upresult = UpLoadImg($uploadimg);
-        if(empty($upresult)){
-            $upresult = NULL;
+        if(empty($upresult) == true){
+            $upresult = UpLoadImg($uploadimg);
         }
     }
+    
 
 
     if(empty($error)){
-        $inproductsql = "INSERT INTO SAN_PHAM (MaSP,Ma_Loai, SoLuong,Gia,Ma_TH,TenSP,ID,GioiThieuSP,HinhAnhSP, HinhAnhCT1, HinhAnhCT2, HinhAnhCT3,HinhAnhCT4) 
-           VALUES ('$maspnew','$loaisp','$sl','$gia','$loaith',N'$tensp','$idnew',N'$gt','$upresult','$upresult1','$upresult2','$upresult3','$upresult4')  ";
+        $inproductsql = "INSERT INTO SAN_PHAM (MaSP,Ma_Loai, SoLuong,Gia,Ma_TH,TenSP,ID,GioiThieuSP,HinhAnhSP)
+           VALUES ('$maspnew','$loaisp','$sl','$gia','$loaith',N'$tensp','$idnew',N'$gt',N'$upresult')  ";
         $conninproduct = mysqli_query($conn, $inproductsql);
         header("Location: ./product-admin.php?limit=6&page-num=1");
     }else{

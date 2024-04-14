@@ -2,28 +2,6 @@
 include('assets/function/connect.php');
 session_start();
 ?>
-
-<script type="text/javascript" src="./ajax/jquery-3.6.3.min.js"></script>
-
-<script>
-    $(document).ready(function(){
-        $(".loaihang").click(function(){
-            var id = $(this).attr("dulieu");
-            $.get("category-load.php",{i : id}, function(data){
-                $("#ketqua").html(data);
-            });
-            
-        }); 
-        $(".loaisp").click(function(){
-            var id = $(this).attr("dulieuid");
-            var th = $(this).attr("dulieuth");
-            $.get("category-load.php",{i : id, t : th}, function(datasp){
-                $("#ketqua").html(datasp);
-            });
-            
-        }); 
-    });
-</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,42 +35,50 @@ session_start();
                 <ul id="navbar">
                     <li><a href="index.php">TRANG CHỦ</a></li>
                     <li><a href="about.php">GIỚI THIỆU</a></li>
-                    <li><a class="active" href="#">DANH MỤC SẢN PHẨM</a>
-                        <ul class="sub-menu">
+                    <li><a href="#">DANH MỤC SẢN PHẨM</a>
+                        <ul class = "sub-menu">
                             <?php
-                            $DMsql = "SELECT * FROM Loai_SP";
-                            $connDM = $conn->prepare($DMsql);
-                            $connDM->execute();
-                            while($rowDM = $connDM->fetch(PDO::FETCH_ASSOC)){ 
-                                $danhmuc = $rowDM['Ma_Loai'];
+                                $DMsql = "SELECT * FROM Loai_SP";
+                                $resultDM = mysqli_query($conn, $DMsql);
+                                while($rowDM = mysqli_fetch_assoc($resultDM)){ 
+                                    $danhmuc = $rowDM['Ma_Loai'];
+                                   /* 
+                                    $sqlthsp = "SELECT DISTINCT Ma_TH from SAN_PHAM WHERE Ma_Loai='$danhmuc'";
+                                    $connth = sqlsrv_query($conn,$sqlthsp);
+                                    $showth= sqlsrv_fetch_object($connth);
+                                    $math = $showth->Ma_TH;
+                                    $sqlth = "SELECT TenTH from THUONG_HIEU WHERE Ma_TH= '$math'";
+                                    $connsqlth = sqlsrv_query($conn,$sqlth);*/
+                                    
+
                             ?>
-                            <li><div class="loaihang" dulieu="<?php echo $rowDM['Ma_Loai'];?>"><?=$rowDM['TenLoai']?></div></li>
-                            <?php
-                                $sqlthsp = "SELECT C.TenTH,C.Ma_TH
+                            <li><a href = "category.php?id=<?=$rowDM['Ma_Loai']?>&limit=8&page-num=1"><?=$rowDM['TenLoai']?></a></li>
+                                <?php
+                                    $sqlthsp = "SELECT C.TenTH,C.Ma_TH
                                     from SAN_PHAM A ,Loai_SP B,THUONG_HIEU C
-                                    WHERE A.Ma_Loai=B.Ma_Loai AND A.Ma_TH=C.Ma_TH AND B.Ma_Loai='$danhmuc'
+                                     WHERE A.Ma_Loai=B.Ma_Loai AND A.Ma_TH=C.Ma_TH AND B.Ma_Loai='$danhmuc'
                                     GROUP BY C.TenTH,C.Ma_TH";
-                                $connth = $conn->prepare($sqlthsp);
-                                $connth->execute();
-                                while($showth= $connth->fetch(PDO::FETCH_ASSOC)){
+                                    $resultth = mysqli_query($conn, $sqlthsp);
+                                    while($showth= mysqli_fetch_assoc($resultth)){
                                     if(!empty($showth['TenTH'])){
                                         $math = $showth['TenTH'];
-                            ?>
-                            <ul class="brand">
-                                <li><div class="loaisp" dulieuid="<?php echo $rowDM['Ma_Loai'];?>" dulieuth="<?php echo $showth['Ma_TH']; ?>"><?=$math?></div></li>
-                            </ul>
-                            <?php
+                                ?>
+                                <ul class = "brand">
+                                    <li><a href="category.php?id=<?=$rowDM['Ma_Loai']?>&limit=8&pagenum=1&TH=<?=$showth['Ma_TH']?>" ><?=$math?></a></li>
+                                </ul>
+                                <?php
                                     }else{
-                            ?>
-                            <ul class="brand">
-                                <li></li>
-                            </ul>
+                                ?>
+                                <ul class = "brand">
+                                    <li></li>
+                                </ul>
                             <?php
                                     }   
+                                    }
                                 }
-                            }
                             ?>
                         </ul>
+                            
                     </li>
                     <li><a href="insurance.php">CHÍNH SÁCH BẢO HIỂM</a></li>
                     <li><a href="cart.php"><i class="fa fa-shopping-bag"></i></a></li>
@@ -122,43 +108,60 @@ session_start();
     </section>
 
     <section class="product-list">
-        <div class="product-container" id="ketqua">
+        <div class="product-container">
             <?php 
-            $idlist = $_GET['id'];
-            if(isset($_GET['TH'])){
-                $idth = $_GET['TH'];
-                $sql = "SELECT * FROM SAN_PHAM WHERE Ma_Loai LIKE '$idlist' and Ma_TH LIKE '$idth'";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-            }else{
-                $sql = "SELECT * FROM SAN_PHAM WHERE Ma_Loai = '$idlist'";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-            }
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-            {
-                $tsql_loai = "SELECT TenLoai, Ma_Loai FROM Loai_SP WHERE Ma_Loai LIKE '$idlist'";
-                $stmt_loai = $conn->prepare($tsql_loai);
-                $stmt_loai->execute();
-                while($row_loai = $stmt_loai->fetch(PDO::FETCH_ASSOC))
-                {
-                    if($row['Ma_Loai']==$row_loai['Ma_Loai'])
-                    {
-                        echo '<div class="product">
-                            <img src="'.$row['HinhAnhSP'].'" alt="">
-                            <div class="design">
-                                <span>'.$row_loai['TenLoai'].'</span>
-                                <a href="product.php?id='.$row['ID'].'"><h5>'.$row['TenSP'].'</h5></a>
-                                <h4>'.number_format($row['Gia'],0,".",".").'đ</h4>
-                            </div>
+            $limititem = !empty($_GET['limit']) ? $_GET['limit'] : 8; // Nếu Tồn tại limit, số sản phẩm/trang = số limit, còn kh thì số limit sẽ = 2 
+            $pagenum = !empty($_GET['page-num']) ? $_GET['page-num'] : 1;
+            $upload = $pagenum-1;     
+                $offset = $upload * $limititem;
+                $idlist = $_GET['id'];
+                if(isset($_GET['TH'])){
+                    $idth = $_GET['TH'];
+                    $sql = "SELECT * FROM SAN_PHAM WHERE Ma_Loai = '$idlist' AND Ma_TH = '$idth'";
+                    $findtotal = mysqli_query($conn, $sql);
+                    $countitem = mysqli_num_rows($findtotal);
+                    $totalpage = ceil($countitem/$limititem);
+                
+                    $tsql = "SELECT MaSP, TenSP, Gia, Ma_Loai, HinhAnhSP, ID FROM SAN_PHAM 
+                                WHERE Ma_Loai = '$idlist' AND Ma_TH = '$idth' LIMIT $limititem OFFSET $offset ";
+                    $stmt = mysqli_query($conn, $tsql);
+                }
+                else {
+
+                    $sql = "SELECT * FROM SAN_PHAM WHERE Ma_Loai = '$idlist'";
+                    $findtotal = mysqli_query($conn, $sql);
+                    $countitem = mysqli_num_rows($findtotal);
+                    $totalpage = ceil($countitem/$limititem);
+
+                    $sql = "SELECT * FROM SAN_PHAM WHERE Ma_Loai = '$idlist' LIMIT $limititem OFFSET $offset";
+                    $stmt = mysqli_query($conn, $sql);
+                }
+                while($row = mysqli_fetch_array($stmt, MYSQLI_ASSOC)) {
+                    $tsql_loai = "SELECT TenLoai, Ma_Loai FROM Loai_SP WHERE Ma_Loai LIKE '$idlist'";
+                    $stmt_loai = mysqli_query($conn, $tsql_loai);
+                    while($row_loai = mysqli_fetch_array($stmt_loai, MYSQLI_ASSOC)) {
+                        if($row['Ma_Loai'] == $row_loai['Ma_Loai']) {
+                            echo '<div class="product">
+                                <img src="'.$row['HinhAnhSP'].'" alt="">
+                                <div class="design">
+                                    <span>'.$row_loai['TenLoai'].'</span>
+                                    <a href ="product.php?id='.$row['ID'].'"><h5>'.$row['TenSP'].'</h5></a>
+                                    <h4>'.number_format($row['Gia'],0,".",".").'đ</h4>
+                                </div>
                             </div>';
+                        }
                     }
                 }
-            }
             ?>
         </div>
     </section>
 
+    <section id = "paginations" class = "section-p1">
+        <?php
+            include ('page_num.php');
+            
+        ?>
+    </section>
     <footer class="footer">
         <div class="footer-container">
             <div class="row">

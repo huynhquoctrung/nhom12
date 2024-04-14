@@ -123,18 +123,15 @@
                             $limititem = !empty($_GET['limit']) ? $_GET['limit'] : 4;
                             $pagenum = !empty($_GET['page-num']) ? $_GET['page-num'] : 1;
                             $upload = $pagenum-1;
-                            if($pagenum==1){
-                                $offset = $pagenum-1;
-                            }    
-                            elseif($pagenum != 1){
-                                $offset = $upload+$limititem-1;
-                                $upload = $offset;
-                            }
+                           
+                            $offset = $upload * $limititem;
+                               
+                            
                             $KHsql = "SELECT * FROM KHACH_HANG ";
                             $findtotal = mysqli_query($conn, $KHsql);
                             $countitem = mysqli_num_rows($findtotal);
                             $totaladminpage = ceil($countitem/$limititem);
-                            $tsql = "SELECT * FROM KHACH_HANG LIMIT $offset, $limititem";
+                            $tsql = "SELECT * FROM KHACH_HANG LIMIT $limititem OFFSET $offset";
                             $connKH = mysqli_query($conn,$tsql);
                             while($showall = mysqli_fetch_array($connKH)){
                         ?>

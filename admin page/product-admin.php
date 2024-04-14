@@ -127,21 +127,19 @@ if(isset($_GET['action'])){
                             </tr>
                         </thead>
                         <?php
+                          
                             $limititem = !empty($_GET['limit']) ? $_GET['limit'] : 6; // Nếu Tồn tại limit, số sản phẩm/trang = số limit, còn kh thì số limit sẽ = 2 
                             $pagenum = !empty($_GET['page-num']) ? $_GET['page-num'] : 1;
                             $upload = $pagenum-1;
-                            if($pagenum==1){
-                                $offset = $pagenum-1;
-                            }    
-                            elseif($pagenum != 1){
-                                $offset = $upload+$limititem-1;
-                                $upload = $offset;
-                            }
+                           
+                            $offset = $upload * $limititem;
+                            
                             $allproductsql ="SELECT * FROM SAN_PHAM ";
                             $findtotal = mysqli_query($conn, $allproductsql);
                             $countitem = mysqli_num_rows($findtotal);
                             $totaladminpage = ceil($countitem/$limititem);
-                            $tsql = "SELECT * FROM SAN_PHAM LIMIT $offset, $limititem";
+                            
+                            $tsql = "SELECT * FROM SAN_PHAM LIMIT $limititem OFFSET $offset";
                             $connproduct = mysqli_query($conn,$tsql);
                             while($showproduct = mysqli_fetch_array($connproduct,MYSQLI_ASSOC)){
                         ?>

@@ -138,16 +138,16 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <strong>Shop name</strong>
                                 <br>
-                                <b>Địa chỉ :</b> VQ4P+249, Phường Tân Phú, Quận 9, TP.Hồ Chí Minh
+                                <b>Địa chỉ :</b> Trường đại học HUTECH Q9 KCN cao
                             </div>
                         </div>
                         <div class="row text-center contact-info">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <hr>
                                 <span>
-                                    <strong>E-mail : </strong> nh6pcgear@gmail.com </span><br>
+                                    <strong>E-mail : </strong> huynhquoctrung.job@gmail.com </span><br>
                                 <span>
-                                    <strong>SĐT : </strong> +0562403407 </span>
+                                    <strong>SĐT : </strong> +0855816424 </span>
                                 <hr>
                             </div>
                         </div>

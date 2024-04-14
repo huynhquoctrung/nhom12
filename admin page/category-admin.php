@@ -19,7 +19,7 @@
                 <li>
                     <a href="#">
                         <span class="icon"><ion-icon name="storefront"></ion-icon></span>
-                        <span class="title">VZ06</span>
+                        <span class="title">nhom12</span>
                     </a>
                 </li>
                 <li>

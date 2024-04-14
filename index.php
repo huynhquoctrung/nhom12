@@ -31,7 +31,7 @@
 <body>
     <header>
         <section id = "header">
-            <a href = "#"><img src="/assets/img/vzlogo.png" class = "logo" alt=""></a>
+            <a href = "#"><img src="/assets/img/logo.png" class = "logo" alt=""></a>
             
             <form method="POST" action="search.php?action=Search" onsubmit="return submitSearch(this);" enctype="application/x-www-form-urlencoded">
             <div class="Card">
@@ -46,11 +46,7 @@
                 </div>
                </div>
             </div>
-                    
-                    
             </form>
-        
-            
             <div>
                 <ul id = "navbar">
                     <li><a class = "active" href="index.php">TRANG CHỦ</a></li>
